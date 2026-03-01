@@ -39,7 +39,8 @@ export const isDuplicateRegistration = (attendees, email) => {
   if (!Array.isArray(attendees)) {
     throw new Error("Attendees should be an array");
   }
-  return attendees.some((attendee) => attendee.email === email);
+  const normalizedEmail = email.trim().toLowerCase();
+  return attendees.some((a) => a.email === normalizedEmail);
 };
 
 /**
@@ -106,20 +107,20 @@ export const buildReport = (event, attendees) => {
  */
 export const formatEventDate = (dateInput) => {
   if (!dateInput) return "Invalid date";
-  const d = new Date(dateInput);
-  if (isNaN(d.getTime())) return "Invalid date";
-  const year = d.getUTCFullYear();
-  const month = String(d.getUTCMonth() + 1).padStart(2, "0");
-  const day = String(d.getUTCDate()).padStart(2, "0");
+  const date = new Date(dateInput);
+  if (isNaN(date.getTime())) return "Invalid date";
+  const year = date.getUTCFullYear();
+  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+  const day = String(date.getUTCDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 };
 
 /**
- * Calculates the check-in percentage for an event.
- * Returns 0 when there are no registered attendees.
+ * Calculates the percentage of attendees who have checked in for an event.
+ * Returns 0 if totalRegistered is 0 or negative, or if checkedIn is negative.
  * @param {number} checkedIn
  * @param {number} totalRegistered
- * @returns {number} percentage rounded to one decimal
+ * @returns {number} percentage rounded to one decimal place
  */
 export const getCheckInPercentage = (checkedIn, totalRegistered) => {
   if (typeof checkedIn !== "number" || typeof totalRegistered !== "number") {
@@ -128,4 +129,41 @@ export const getCheckInPercentage = (checkedIn, totalRegistered) => {
   if (!totalRegistered || totalRegistered <= 0) return 0;
   if (checkedIn < 0) return 0;
   return Math.round((checkedIn / totalRegistered) * 1000) / 10;
+};
+
+/**
+ * Sorts an array of attendees alphabetically by their name property.
+ * returns a new sorted array without mutating the original attendees array.
+ * @param {Array} attendees
+ * @returns {Array} A new array of attendees sorted by name.
+ */
+export const sortAttendeesByName = (attendees) => {
+  if (!Array.isArray(attendees)) {
+    throw new Error("Attendees should be an array");
+  }
+  return [...attendees].sort((a, b) =>
+    (a.name || "").toLowerCase().localeCompare((b.name || "").toLowerCase()),
+  );
+};
+
+/**
+ * Summarizes the check-in status of attendees.
+ * @param {Array} attendees
+ * @returns {{total: number, checkedIn: number, notCheckedIn: number, rate: number}}
+ */
+const summarizeAttendees = (attendees) => {
+  if (!Array.isArray(attendees)) {
+    throw new Error("Attendees should be an array");
+  }
+  if (attendees.length === 0) {
+    return { total: 0, checkedIn: 0, notCheckedIn: 0, rate: 0 };
+  }
+  const checkedIn = attendees.filter((a) => a.checkedIn).length;
+  const total = attendees.length;
+  return {
+    total,
+    checkedIn,
+    notCheckedIn: total - checkedIn,
+    rate: getCheckInPercentage(checkedIn, total),
+  };
 };

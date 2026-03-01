@@ -23,7 +23,8 @@ const eventController = {
   // Get all events
   getAllEvents: async (req, res) => {
     try {
-      const events = await Event.find().sort({ date: -1 });
+      const events = await Event.find().sort({ date: -1 }).lean();
+
       res.status(200).json(events);
     } catch (error) {
       res.status(500).json({ error: error.message });
