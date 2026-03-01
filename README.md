@@ -79,7 +79,7 @@ The React app will open at `hhtp://localhost:3000` and proxy API requests to the
 | GET    | `/api/events/:eventId/attendees`                     | List attendees of a given event |
 | PUT    | `/api/events/:eventId/attendees/:attendeeId/checkin` | Check in an attendee            |
 | GET    | `/api/events/:eventId/report?format=json\|csv`       | Get attendance report           |
-
+| DELETE | `/api/events/:eventId/attendees/:attendeeId`		| Delete a given attendee from an event |	
 ---
 
 ## How to Run Tests
