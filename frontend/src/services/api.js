@@ -3,12 +3,10 @@ const API = import.meta.env.VITE_API_URL || "/api";
 export async function fetchEvents() {
   const res = await fetch(`${API}/events`);
   if (!res.ok) throw new Error("Failed to fetch events");
-  // console.log("Fetched events:", res);
   return res.json();
 }
 
 export async function createEvent(data) {
-  console.log("Creating event with data:", data);
   const res = await fetch(`${API}/events`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -26,7 +24,6 @@ export async function fetchAttendees(eventId) {
 }
 
 export async function registerAttendee(eventId, data) {
-  console.log("Registering attendee:", { ...data, eventId });
   const res = await fetch(`${API}/events/${eventId}/attendees`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -54,5 +51,27 @@ export async function fetchReport(eventId, format = "json") {
     return res.blob();
   }
   if (!res.ok) throw new Error("Failed to fetch report");
+  return res.json();
+}
+
+export async function deleteEvent(eventId) {
+  const res = await fetch(`${API}/events/${eventId}`, { method: "DELETE" });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error || "Failed to delete event");
+  return json;
+}
+
+export async function deleteAttendee(eventId, attendeeId) {
+  const res = await fetch(`${API}/events/${eventId}/attendees/${attendeeId}`, {
+    method: "DELETE",
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error || "Failed to remove attendee");
+  return json;
+}
+
+export async function fetchEventStats(eventId) {
+  const res = await fetch(`${API}/events/${eventId}/stats`);
+  if (!res.ok) throw new Error("Failed to fetch event stats");
   return res.json();
 }

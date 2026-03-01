@@ -37,7 +37,7 @@ const attendeeController = {
       // I mean I could have done this without using the helper function, this just for the unit tests purpose
       // Check if attendee is already registered for the event
       const existingAttendees = await Attendee.find({ event: eventId });
-      if (isDuplicateRegistration(existingAttendees, email)) {
+      if (isDuplicateRegistration(existingAttendees, email, eventId)) {
         return response
           .status(409)
           .json({ error: "Attendee with this email is already registered" });

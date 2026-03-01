@@ -32,15 +32,24 @@ export const capacityExceeded = (current, max) => {
  * @param {string} email
  * @returns {boolean}
  */
-export const isDuplicateRegistration = (attendees, email) => {
+export const isDuplicateRegistration = (attendees, email, eventId) => {
   if (!email || typeof email !== "string") {
     throw new Error("Email should be a non-empty string");
   }
   if (!Array.isArray(attendees)) {
     throw new Error("Attendees should be an array");
   }
+  // console.log(
+  //   "Checking for duplicate registration with email:",
+  //   email,
+  //   "and eventId:",
+  //   eventId,
+  // );
+
   const normalizedEmail = email.trim().toLowerCase();
-  return attendees.some((a) => a.email === normalizedEmail);
+  return attendees.some(
+    (a) => a.email === normalizedEmail && a.event.toString() === eventId,
+  );
 };
 
 /**

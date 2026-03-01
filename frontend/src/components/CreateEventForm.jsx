@@ -53,7 +53,7 @@ export default function CreateEventForm({ onCreated }) {
           type="number"
           min="1"
           value={capacity}
-          onChange={(e) => setCapacity(Number(e.target.value))}
+          onChange={(e) => setCapacity(e.target.value)}
         />
       </label>
 

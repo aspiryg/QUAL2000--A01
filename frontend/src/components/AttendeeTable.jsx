@@ -1,4 +1,18 @@
-export default function AttendeeTable({ attendees, onCheckIn }) {
+export default function AttendeeTable({
+  attendees,
+  onCheckIn,
+  onDelete,
+  loading,
+}) {
+  if (loading) {
+    return (
+      <div style={styles.loading}>
+        <div style={styles.spinner} />
+        <span>Loading attendees…</span>
+      </div>
+    );
+  }
+
   if (!attendees.length)
     return (
       <p style={{ color: "#999", fontStyle: "italic", fontSize: 14 }}>
@@ -12,13 +26,13 @@ export default function AttendeeTable({ attendees, onCheckIn }) {
         <tr>
           <th style={styles.th}>Name</th>
           <th style={styles.th}>Email</th>
-          <th style={styles.th}>Checked In</th>
-          <th style={styles.th}>Action</th>
+          <th style={styles.th}>Status</th>
+          <th style={styles.th}>Actions</th>
         </tr>
       </thead>
       <tbody>
         {attendees.map((a) => (
-          <tr key={a._id}>
+          <tr key={a._id} style={styles.row}>
             <td style={styles.td}>{a.name}</td>
             <td style={styles.td}>{a.email}</td>
             <td style={styles.td}>
@@ -33,15 +47,29 @@ export default function AttendeeTable({ attendees, onCheckIn }) {
                   color: a.checkedIn ? "#166534" : "#92400e",
                 }}
               >
-                {a.checkedIn ? "Yes" : "No"}
+                {a.checkedIn ? "Checked In" : "Pending"}
               </span>
             </td>
             <td style={styles.td}>
-              {!a.checkedIn && (
-                <button style={styles.btn} onClick={() => onCheckIn(a._id)}>
-                  Check In
-                </button>
-              )}
+              <div style={{ display: "flex", gap: 6 }}>
+                {!a.checkedIn && (
+                  <button
+                    style={styles.checkInBtn}
+                    onClick={() => onCheckIn(a._id)}
+                  >
+                    Check In
+                  </button>
+                )}
+                {onDelete && (
+                  <button
+                    style={styles.removeBtn}
+                    onClick={() => onDelete(a._id, a.name)}
+                    title="Remove attendee"
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
             </td>
           </tr>
         ))}
@@ -69,7 +97,8 @@ const styles = {
     letterSpacing: "0.4px",
   },
   td: { padding: "8px 12px", borderBottom: "1px solid #f0f0f0" },
-  btn: {
+  row: { transition: "background 0.15s" },
+  checkInBtn: {
     padding: "5px 12px",
     background: "#f59e0b",
     color: "#fff",
@@ -78,5 +107,32 @@ const styles = {
     cursor: "pointer",
     fontSize: 13,
     fontWeight: 500,
+  },
+  removeBtn: {
+    padding: "5px 12px",
+    background: "none",
+    color: "#dc2626",
+    border: "1px solid #fca5a5",
+    borderRadius: 4,
+    cursor: "pointer",
+    fontSize: 13,
+    fontWeight: 500,
+    transition: "background 0.15s",
+  },
+  loading: {
+    display: "flex",
+    alignItems: "center",
+    gap: 10,
+    padding: "20px 0",
+    color: "#777",
+    fontSize: 14,
+  },
+  spinner: {
+    width: 18,
+    height: 18,
+    border: "2px solid #e5e7eb",
+    borderTopColor: "#2563eb",
+    borderRadius: "50%",
+    animation: "spin 0.6s linear infinite",
   },
 };

@@ -6,14 +6,11 @@ export default function RegisterForm({ onRegister }) {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  // console.log("Rendering RegisterForm with onRegister:", onRegister);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setSuccess("");
     try {
-      // console.log("Submitting registration:", { name, email });
       await onRegister({ name, email });
       setSuccess(`${name} registered successfully`);
       setName("");

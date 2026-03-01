@@ -1,9 +1,11 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import CreateEventForm from "./components/CreateEventForm.jsx";
 import EventList from "./components/EventList.jsx";
 import RegisterForm from "./components/RegisterForm.jsx";
 import AttendeeTable from "./components/AttendeeTable.jsx";
 import ReportView from "./components/ReportView.jsx";
+import { ToastContainer } from "./components/Toast.jsx";
+import ConfirmDialog from "./components/ConfirmDialog.jsx";
 import {
   fetchEvents,
   createEvent,
@@ -11,7 +13,11 @@ import {
   registerAttendee,
   checkInAttendee,
   fetchReport,
+  deleteEvent,
+  deleteAttendee,
 } from "./services/api";
+
+let toastId = 0;
 
 export default function App() {
   const [events, setEvents] = useState([]);
@@ -19,28 +25,70 @@ export default function App() {
   const [attendees, setAttendees] = useState([]);
   const [report, setReport] = useState(null);
   const [tab, setTab] = useState("attendees");
+  const [loadingAttendees, setLoadingAttendees] = useState(false);
+  const [toasts, setToasts] = useState([]);
+  const [confirm, setConfirm] = useState(null); // { message, onConfirm }
+  const confirmResolveRef = useRef(null);
+
+  // ─── Toast helpers ──────────────────────────────────────────────────
+
+  const addToast = useCallback((message, type = "success") => {
+    const id = ++toastId;
+    setToasts((prev) => [...prev, { id, message, type }]);
+  }, []);
+
+  const removeToast = useCallback((id) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  }, []);
+
+  // ─── Confirm dialog ─────────────────────────────────────────────────
+
+  const showConfirm = useCallback((message) => {
+    return new Promise((resolve) => {
+      confirmResolveRef.current = resolve;
+      setConfirm({ message });
+    });
+  }, []);
+
+  const handleConfirmYes = () => {
+    confirmResolveRef.current?.(true);
+    setConfirm(null);
+  };
+
+  const handleConfirmNo = () => {
+    confirmResolveRef.current?.(false);
+    setConfirm(null);
+  };
+
+  // ─── Data loading ───────────────────────────────────────────────────
 
   const loadEvents = useCallback(async () => {
     try {
       const data = await fetchEvents();
       setEvents(data);
     } catch (err) {
-      console.error(err);
+      addToast("Failed to load events", "error");
     }
-  }, []);
+  }, [addToast]);
 
   useEffect(() => {
     loadEvents();
   }, [loadEvents]);
 
-  const loadAttendees = useCallback(async (eventId) => {
-    try {
-      const data = await fetchAttendees(eventId);
-      setAttendees(data);
-    } catch (err) {
-      console.error(err);
-    }
-  }, []);
+  const loadAttendees = useCallback(
+    async (eventId) => {
+      setLoadingAttendees(true);
+      try {
+        const data = await fetchAttendees(eventId);
+        setAttendees(data);
+      } catch (err) {
+        addToast("Failed to load attendees", "error");
+      } finally {
+        setLoadingAttendees(false);
+      }
+    },
+    [addToast],
+  );
 
   useEffect(() => {
     if (selectedEvent) {
@@ -50,22 +98,61 @@ export default function App() {
     }
   }, [selectedEvent, loadAttendees]);
 
+  // ─── Handlers ───────────────────────────────────────────────────────
+
   const handleCreateEvent = async (data) => {
     await createEvent(data);
     await loadEvents();
+    addToast(`Event "${data.name}" created`);
+  };
+
+  const handleDeleteEvent = async (eventId, eventName) => {
+    const ok = await showConfirm(
+      `Delete "${eventName}" and all its attendees? This cannot be undone.`,
+    );
+    if (!ok) return;
+    try {
+      await deleteEvent(eventId);
+      addToast(`Event "${eventName}" deleted`);
+      if (selectedEvent === eventId) {
+        setSelectedEvent(null);
+        setAttendees([]);
+        setReport(null);
+      }
+      await loadEvents();
+    } catch (err) {
+      addToast(err.message, "error");
+    }
   };
 
   const handleRegister = async (data) => {
     await registerAttendee(selectedEvent, data);
     await loadAttendees(selectedEvent);
+    await loadEvents(); // refresh attendee counts
+    addToast(`${data.name} registered successfully`);
+  };
+
+  const handleDeleteAttendee = async (attendeeId, attendeeName) => {
+    const ok = await showConfirm(`Remove "${attendeeName}" from this event?`);
+    if (!ok) return;
+    try {
+      await deleteAttendee(selectedEvent, attendeeId);
+      addToast(`${attendeeName} removed`);
+      await loadAttendees(selectedEvent);
+      await loadEvents(); // refresh attendee counts
+    } catch (err) {
+      addToast(err.message, "error");
+    }
   };
 
   const handleCheckIn = async (attendeeId) => {
     try {
       await checkInAttendee(selectedEvent, attendeeId);
       await loadAttendees(selectedEvent);
+      await loadEvents(); // refresh checked-in counts
+      addToast("Attendee checked in");
     } catch (err) {
-      alert(err.message);
+      addToast(err.message, "error");
     }
   };
 
@@ -75,7 +162,7 @@ export default function App() {
       setReport(data);
       setTab("report");
     } catch (err) {
-      console.error(err);
+      addToast("Failed to load report", "error");
     }
   };
 
@@ -88,8 +175,9 @@ export default function App() {
       a.download = "report.csv";
       a.click();
       window.URL.revokeObjectURL(url);
+      addToast("CSV downloaded");
     } catch (err) {
-      console.error(err);
+      addToast("CSV download failed", "error");
     }
   };
 
@@ -97,6 +185,18 @@ export default function App() {
 
   return (
     <div style={styles.container}>
+      {/* Toast notifications */}
+      <ToastContainer toasts={toasts} removeToast={removeToast} />
+
+      {/* Confirm dialog */}
+      {confirm && (
+        <ConfirmDialog
+          message={confirm.message}
+          onConfirm={handleConfirmYes}
+          onCancel={handleConfirmNo}
+        />
+      )}
+
       <header style={styles.header}>
         <h1 style={styles.title}>Event Check-In System</h1>
         <p style={styles.subtitle}>
@@ -112,6 +212,7 @@ export default function App() {
             events={events}
             selected={selectedEvent}
             onSelect={setSelectedEvent}
+            onDelete={handleDeleteEvent}
           />
         </div>
 
@@ -126,6 +227,12 @@ export default function App() {
                     ? new Date(selectedEventObj.date).toLocaleDateString()
                     : ""}
                 </span>
+                {selectedEventObj && (
+                  <span style={styles.capacityBadge}>
+                    {selectedEventObj.attendeeCount ?? 0}/
+                    {selectedEventObj.capacity} registered
+                  </span>
+                )}
               </div>
 
               <div style={styles.tabs}>
@@ -134,6 +241,9 @@ export default function App() {
                   onClick={() => setTab("attendees")}
                 >
                   Attendees
+                  {attendees.length > 0 && (
+                    <span style={styles.tabBadge}>{attendees.length}</span>
+                  )}
                 </button>
                 <button
                   style={tab === "report" ? styles.tabActive : styles.tab}
@@ -149,6 +259,8 @@ export default function App() {
                   <AttendeeTable
                     attendees={attendees}
                     onCheckIn={handleCheckIn}
+                    onDelete={handleDeleteAttendee}
+                    loading={loadingAttendees}
                   />
                 </>
               )}
@@ -175,7 +287,7 @@ export default function App() {
 
 const styles = {
   container: {
-    maxWidth: 1020,
+    maxWidth: 1060,
     margin: "0 auto",
     padding: "24px 20px",
     fontFamily:
@@ -197,8 +309,17 @@ const styles = {
     alignItems: "baseline",
     gap: 12,
     marginBottom: 12,
+    flexWrap: "wrap",
   },
   eventDate: { fontSize: 13, color: "#777" },
+  capacityBadge: {
+    marginLeft: "auto",
+    fontSize: 12,
+    color: "#555",
+    background: "#f3f4f6",
+    padding: "3px 10px",
+    borderRadius: 10,
+  },
   tabs: { display: "flex", gap: 4, marginBottom: 18 },
   tab: {
     padding: "7px 18px",
@@ -208,6 +329,9 @@ const styles = {
     cursor: "pointer",
     fontSize: 14,
     transition: "background 0.15s",
+    display: "flex",
+    alignItems: "center",
+    gap: 6,
   },
   tabActive: {
     padding: "7px 18px",
@@ -217,6 +341,16 @@ const styles = {
     borderRadius: 5,
     cursor: "pointer",
     fontSize: 14,
+    display: "flex",
+    alignItems: "center",
+    gap: 6,
+  },
+  tabBadge: {
+    fontSize: 11,
+    background: "rgba(255,255,255,0.25)",
+    padding: "1px 7px",
+    borderRadius: 8,
+    fontWeight: 600,
   },
   emptyState: {
     textAlign: "center",

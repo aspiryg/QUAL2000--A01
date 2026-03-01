@@ -29,8 +29,10 @@ const eventController = {
       // attach attendee count + summary to each event
       const enriched = await Promise.all(
         events.map(async (ev) => {
-          const attendees = await Attendee.find({ eventId: ev._id }).lean();
+          const attendees = await Attendee.find({ event: ev._id }).lean();
+          // console.log(`Event: ${ev.name}, Attendees:`, attendees);
           const summary = summarizeAttendees(attendees);
+          // console.log(`Event: ${ev.name}, Attendee Summary:`, summary);
           return {
             ...ev,
             attendeeCount: summary.total,
