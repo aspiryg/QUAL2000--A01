@@ -151,7 +151,7 @@ export const sortAttendeesByName = (attendees) => {
  * @param {Array} attendees
  * @returns {{total: number, checkedIn: number, notCheckedIn: number, rate: number}}
  */
-const summarizeAttendees = (attendees) => {
+export const summarizeAttendees = (attendees) => {
   if (!Array.isArray(attendees)) {
     throw new Error("Attendees should be an array");
   }

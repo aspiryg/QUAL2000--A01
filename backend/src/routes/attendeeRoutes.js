@@ -9,6 +9,10 @@ router.get(
   "/events/:eventId/attendees",
   attendeeController.getAttendeesByEvent,
 );
+router.delete(
+  "/events/:eventId/attendees/:attendeeId",
+  attendeeController.deleteAttendee,
+);
 
 // Check-in route
 router.put(
