@@ -20,7 +20,7 @@ import {
 
 // --- 1. Test isValidEmailFormat ---
 
-test.describe("Test isValidEmailFormat function", () => {
+test.describe("Unit Test isValidEmailFormat function", () => {
   test("should return true for valid email formats", () => {
     assert.strictEqual(isValidEmailFormat("harry.potter@gryffindor.com"), true);
     assert.strictEqual(
@@ -62,7 +62,7 @@ test.describe("Test isValidEmailFormat function", () => {
 
 // --- 2. Test capacityExceeded function ---
 
-test.describe("Test capacityExceeded function", () => {
+test.describe("Unit Test capacityExceeded function", () => {
   test("should return true when current capacity is equal to max capacity", () => {
     assert.strictEqual(capacityExceeded(100, 100), true);
   });
@@ -91,9 +91,9 @@ test.describe("Test capacityExceeded function", () => {
   });
 });
 
-// --- 3. Test isDuplicateRegistration function ---
+// --- 3. Unit Test isDuplicateRegistration function ---
 
-test.describe("Test isDuplicateRegistration function", () => {
+test.describe("Unit Test isDuplicateRegistration function", () => {
   const eventId = "event123";
   const attendees = [
     { email: "harry.potter@gryffindor.com", event: eventId },
@@ -207,8 +207,8 @@ test.describe("Test isDuplicateRegistration function", () => {
   });
 });
 
-// --- 4. Test canCheckIn function ---
-test.describe("Test canCheckIn function", () => {
+// --- 4. Unit Test canCheckIn function ---
+test.describe("Unit Test canCheckIn function", () => {
   test("The function should return true if attendee is registered and has not checked in", () => {
     const attendee = {
       name: "Harry Potter",
@@ -259,9 +259,9 @@ test.describe("Test canCheckIn function", () => {
   });
 });
 
-// --- 5. Test buildReport function ---
+// --- 5. Unit Test buildReport function ---
 // (Tests for buildReport function would go here, but I'm skipping it for now since it's more complex and I want to focus on the simpler helper functions first)
-test.describe("Test buildReport function", () => {
+test.describe("Unit Test buildReport function", () => {
   const event = {
     name: "Workshop",
     date: "2026-03-01",
@@ -365,4 +365,4 @@ test.describe("Test buildReport function", () => {
   });
 });
 
-//  TODO: Test for (formatEventDate, getCheckInPercentage, sortAttendeesByName, summarizeAttendees)
+//  TODO: Unit Test for (formatEventDate, getCheckInPercentage, sortAttendeesByName, summarizeAttendees)
