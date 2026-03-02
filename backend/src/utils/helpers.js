@@ -10,7 +10,12 @@ export const isValidEmailFormat = (email) => {
     return false;
   }
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
+  // console.log(
+  //   email,
+  //   "is valid email format?",
+  //   emailRegex.test(email.trim().toLowerCase()),
+  // );
+  return emailRegex.test(email.trim().toLowerCase());
 };
 
 /**
@@ -47,6 +52,7 @@ export const isDuplicateRegistration = (attendees, email, eventId) => {
   // );
 
   const normalizedEmail = email.trim().toLowerCase();
+
   return attendees.some(
     (a) => a.email === normalizedEmail && a.event.toString() === eventId,
   );
@@ -82,6 +88,19 @@ export const canCheckIn = (attendee) => {
   };
 };
 
+/**
+ * Builds a report for a given event and its attendees.
+ * @param {Object} event - The event object.
+ * @param {Array} attendees - The array of attendee objects.
+ * @returns {{
+ *   eventName: string,
+ *   eventDate: string,
+ *   totalRegistered: number,
+ *   totalCheckedIn: number,
+ *   checkedInAttendees: Array,
+ *   registrationStatusCounts: Object
+ * }} The report object containing event and attendee information.
+ */
 export const buildReport = (event, attendees) => {
   if (!event || typeof event !== "object") {
     throw new Error("Event should be an object");
@@ -90,10 +109,13 @@ export const buildReport = (event, attendees) => {
     throw new Error("Attendees should be an array");
   }
   const checkedIn = attendees.filter((a) => a.checkedIn);
+  const totalRegistered = attendees.filter(
+    (a) => a.registrationStatus === "registered",
+  ).length;
   return {
     eventName: event.name,
     eventDate: event.date,
-    totalRegistered: attendees.length,
+    totalRegistered: totalRegistered,
     totalCheckedIn: checkedIn.length,
     checkedInAttendees: checkedIn.map((a) => ({
       name: a.name,
