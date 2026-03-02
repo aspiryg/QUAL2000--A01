@@ -70,20 +70,24 @@ The React app will open at `hhtp://localhost:3000` and proxy API requests to the
 
 ## API Endpoints
 
-| Method | Endpoint                                             | Description                           |
-| ------ | ---------------------------------------------------- | ------------------------------------- |
-| POST   | `/api/events`                                        | Create a new event                    |
-| GET    | `/api/events`                                        | List all events                       |
-| GET    | `/api/events/:id`                                    | Get a single event                    |
-| POST   | `/api/events/:eventId/attendees`                     | Register an attendee                  |
-| GET    | `/api/events/:eventId/attendees`                     | List attendees of a given event       |
-| PUT    | `/api/events/:eventId/attendees/:attendeeId/checkin` | Check in an attendee                  |
-| GET    | `/api/events/:eventId/report?format=json\|csv`       | Get attendance report                 |
-| DELETE | `/api/events/:eventId/attendees/:attendeeId`         | Delete a given attendee from an event |
+| Method | Endpoint                                             | Description                                  |
+| ------ | ---------------------------------------------------- | -------------------------------------------- |
+| POST   | `/api/events`                                        | Create a new event                           |
+| GET    | `/api/events`                                        | List all events                              |
+| GET    | `/api/events/:id`                                    | Get a single event                           |
+| POST   | `/api/events/:eventId/attendees`                     | Register an attendee                         |
+| GET    | `/api/events/:eventId/attendees`                     | List attendees of a given event              |
+| PUT    | `/api/events/:eventId/attendees/:attendeeId/checkin` | Check in an attendee                         |
+| GET    | `/api/events/:eventId/report?format=json\|csv`       | Get attendance report                        |
+| DELETE | `/api/events/:eventId/attendees/:attendeeId`         | Delete an attendee from an event             |
+| DELETE | `/api/events/:eventId`                               | Delete an event and its registered attendees |
+| GET    | `/api/events/:eventId/stats`                         | Retrieve event statistics                    |
 
 ---
 
 ## How to Run Tests
+
+### 1. Backend Tests
 
 ```bash
 cd backend
@@ -104,6 +108,14 @@ npm run test:integration
 - report building
 
 **Integration tests**
+
+---
+
+### 2. Frontend Tests
+
+```
+TODO
+```
 
 ---
 
