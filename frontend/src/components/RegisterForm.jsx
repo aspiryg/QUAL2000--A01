@@ -12,7 +12,7 @@ export default function RegisterForm({ onRegister }) {
     setSuccess("");
     try {
       await onRegister({ name, email });
-      setSuccess(`${name} registered successfully`);
+      setSuccess(`${name} has been enrolled`);
       setName("");
       setEmail("");
     } catch (err) {
@@ -27,38 +27,41 @@ export default function RegisterForm({ onRegister }) {
           margin: "0 0 10px",
           fontSize: 15,
           fontWeight: 600,
-          color: "#1a1a1a",
+          color: "#1a1a2e",
+          fontFamily: '"Cinzel", serif',
         }}
       >
-        Register Attendee
+        Enrol Witch / Wizard
       </h4>
 
       {error && <p style={styles.error}>{error}</p>}
       {success && <p style={styles.success}>{success}</p>}
 
       <label style={styles.label}>
-        Name
+        Witch / Wizard Name
         <input
           style={styles.input}
           value={name}
           onChange={(e) => setName(e.target.value)}
+          placeholder="e.g. Harry Potter"
           required
         />
       </label>
 
       <label style={styles.label}>
-        Email
+        Owl Post (Email)
         <input
           style={styles.input}
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          placeholder="e.g. harry@hogwarts.edu"
           required
         />
       </label>
 
       <button type="submit" style={styles.button}>
-        Register
+        Enrol
       </button>
     </form>
   );
@@ -66,41 +69,45 @@ export default function RegisterForm({ onRegister }) {
 
 const styles = {
   form: {
-    border: "1px solid #e0e0e0",
+    border: "1px solid #c4b08a",
     borderRadius: 8,
     padding: 16,
     marginBottom: 18,
     maxWidth: 360,
-    background: "#f8faf8",
+    background: "#faf6ed",
   },
   label: {
     display: "block",
     marginBottom: 10,
     fontSize: 13,
     fontWeight: 500,
-    color: "#444",
+    color: "#5c4033",
+    fontFamily: '"Lora", serif',
   },
   input: {
     display: "block",
     width: "100%",
     padding: "8px 10px",
     marginTop: 4,
-    border: "1px solid #ccc",
+    border: "1px solid #c4b08a",
     borderRadius: 5,
     boxSizing: "border-box",
     fontSize: 14,
+    fontFamily: '"Lora", serif',
+    background: "#fff",
     outline: "none",
   },
   button: {
     padding: "8px 16px",
-    background: "#16a34a",
+    background: "#2d6a4f",
     color: "#fff",
     border: "none",
     borderRadius: 5,
     cursor: "pointer",
     fontSize: 14,
-    fontWeight: 500,
+    fontWeight: 600,
+    fontFamily: '"Cinzel", serif',
   },
-  error: { color: "#dc2626", fontSize: 13, margin: "0 0 6px" },
-  success: { color: "#16a34a", fontSize: 13, margin: "0 0 6px" },
+  error: { color: "#740001", fontSize: 13, margin: "0 0 6px" },
+  success: { color: "#2d6a4f", fontSize: 13, margin: "0 0 6px" },
 };

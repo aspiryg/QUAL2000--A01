@@ -1,6 +1,6 @@
 # QUAL2000 - Assignment 01
 
-A simple web application for managing **magical events and attendees** at _Hogwarts School of Witchcraft and Wizardry_, built with the modern “spells” of **Express**, **Mongoose**, and **React**.
+A simple web application built for _Hogwarts School of Witchcraft and Wizardry_ to manage school eventd **(Quidditch matches, feasts, classes, the Yule Ball, etc.)**, enrol witches & wizards, record arrivals, and generate attendance scrolls. Built with the modern “spells” of **Express**, **Mongoose**, and **React**.
 
 All magic aside — the true purpose of this project is to demonstrate the proper implementation of different types of testing:
 
@@ -10,10 +10,14 @@ All magic aside — the true purpose of this project is to demonstrate the prope
 
 ## Features
 
-- Create magical events (Triwizard Tournament, Yule Ball, Duelling Club, etc.)
-- Register witches and wizards as attendees
-- Check in attendees at the Great Hall gates
-- Generate attendance reports (visual dashboard or downloadable CSV scroll)
+- **Schedule events** - create magical events (Triwizard Tournament, Yule Ball, Duelling Club, etc.)
+- **Enrol witches & wizards** - register attendees with unique Owl Post (email) validation
+- **Record arrival** - mark attendees as arrived at the Great Hall gates
+- **Attendance scrolls** - generate attendance reports (visual dashboard or downloadable CSV scroll)
+- **Delete events & attendees** - with confirmation dialogs and attendees cascade removal
+- **Event stats** - live enrolled/arrived counts and spots remaining
+- **Search & filter** - find events quickly from the notice board
+- **Toast notifications**
 
 ---
 
@@ -73,16 +77,16 @@ The React app will open at `hhtp://localhost:3000` and proxy API requests to the
 
 | Method | Endpoint                                             | Description                                  |
 | ------ | ---------------------------------------------------- | -------------------------------------------- |
-| POST   | `/api/events`                                        | Create a new magical event                   |
-| GET    | `/api/events`                                        | List all events                              |
+| POST   | `/api/events`                                        | Schedule a new event                         |
+| GET    | `/api/events`                                        | List all events (with attendee counts)       |
 | GET    | `/api/events/:id`                                    | Retrieve a single event                      |
-| POST   | `/api/events/:eventId/attendees`                     | Register an attendee                         |
-| GET    | `/api/events/:eventId/attendees`                     | List attendees of a given event              |
-| PUT    | `/api/events/:eventId/attendees/:attendeeId/checkin` | Check in an attendee                         |
-| GET    | `/api/events/:eventId/report?format=json\|csv`       | Get attendance report                        |
-| DELETE | `/api/events/:eventId/attendees/:attendeeId`         | Delete an attendee from an event             |
 | DELETE | `/api/events/:eventId`                               | Delete an event and its registered attendees |
-| GET    | `/api/events/:eventId/stats`                         | Retrieve event statistics                    |
+| POST   | `/api/events/:eventId/attendees`                     | Enrol a witch/wizard                         |
+| GET    | `/api/events/:eventId/attendees`                     | List enrolled witches & wizards              |
+| DELETE | `/api/events/:eventId/attendees/:attendeeId`         | Remove an attendee                           |
+| PUT    | `/api/events/:eventId/attendees/:attendeeId/checkin` | Record arrival                               |
+| GET    | `/api/events/:eventId/report?format=json\|csv`       | Get attendance scroll                        |
+| GET    | `/api/events/:eventId/stats`                         | Get event stats & spots remaining            |
 
 ---
 
@@ -109,6 +113,10 @@ npm run test:integration
 - report building
 
 **Integration tests**
+
+```
+TODO:
+```
 
 ---
 

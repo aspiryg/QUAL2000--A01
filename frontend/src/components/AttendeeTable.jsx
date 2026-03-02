@@ -8,15 +8,15 @@ export default function AttendeeTable({
     return (
       <div style={styles.loading}>
         <div style={styles.spinner} />
-        <span>Loading attendees…</span>
+        <span>Summoning roster…</span>
       </div>
     );
   }
 
   if (!attendees.length)
     return (
-      <p style={{ color: "#999", fontStyle: "italic", fontSize: 14 }}>
-        No attendees registered yet.
+      <p style={{ color: "#8b7355", fontStyle: "italic", fontSize: 14 }}>
+        No witches or wizards enrolled yet.
       </p>
     );
 
@@ -24,8 +24,8 @@ export default function AttendeeTable({
     <table style={styles.table}>
       <thead>
         <tr>
-          <th style={styles.th}>Name</th>
-          <th style={styles.th}>Email</th>
+          <th style={styles.th}>Witch / Wizard</th>
+          <th style={styles.th}>Owl Post</th>
           <th style={styles.th}>Status</th>
           <th style={styles.th}>Actions</th>
         </tr>
@@ -43,11 +43,11 @@ export default function AttendeeTable({
                   borderRadius: 10,
                   fontSize: 12,
                   fontWeight: 500,
-                  background: a.checkedIn ? "#dcfce7" : "#fef3c7",
-                  color: a.checkedIn ? "#166534" : "#92400e",
+                  background: a.checkedIn ? "#d4edda" : "#fef3c7",
+                  color: a.checkedIn ? "#155724" : "#856404",
                 }}
               >
-                {a.checkedIn ? "Checked In" : "Pending"}
+                {a.checkedIn ? "Arrived" : "Awaiting"}
               </span>
             </td>
             <td style={styles.td}>
@@ -57,14 +57,14 @@ export default function AttendeeTable({
                     style={styles.checkInBtn}
                     onClick={() => onCheckIn(a._id)}
                   >
-                    Check In
+                    Mark Arrived
                   </button>
                 )}
                 {onDelete && (
                   <button
                     style={styles.removeBtn}
                     onClick={() => onDelete(a._id, a.name)}
-                    title="Remove attendee"
+                    title="Expel from event"
                   >
                     Remove
                   </button>
@@ -87,36 +87,39 @@ const styles = {
   },
   th: {
     textAlign: "left",
-    borderBottom: "2px solid #e5e7eb",
+    borderBottom: "2px solid #c4b08a",
     padding: "8px 12px",
-    background: "#f9fafb",
+    background: "#ede4d0",
     fontSize: 12,
     fontWeight: 600,
-    color: "#555",
+    color: "#5c4033",
     textTransform: "uppercase",
     letterSpacing: "0.4px",
+    fontFamily: '"Cinzel", serif',
   },
-  td: { padding: "8px 12px", borderBottom: "1px solid #f0f0f0" },
+  td: { padding: "8px 12px", borderBottom: "1px solid #e8dcc8" },
   row: { transition: "background 0.15s" },
   checkInBtn: {
     padding: "5px 12px",
-    background: "#f59e0b",
-    color: "#fff",
+    background: "#d3a625",
+    color: "#1a1a2e",
     border: "none",
     borderRadius: 4,
     cursor: "pointer",
     fontSize: 13,
-    fontWeight: 500,
+    fontWeight: 600,
+    fontFamily: '"Lora", serif',
   },
   removeBtn: {
     padding: "5px 12px",
     background: "none",
-    color: "#dc2626",
-    border: "1px solid #fca5a5",
+    color: "#740001",
+    border: "1px solid #c4a08a",
     borderRadius: 4,
     cursor: "pointer",
     fontSize: 13,
     fontWeight: 500,
+    fontFamily: '"Lora", serif',
     transition: "background 0.15s",
   },
   loading: {
@@ -124,14 +127,14 @@ const styles = {
     alignItems: "center",
     gap: 10,
     padding: "20px 0",
-    color: "#777",
+    color: "#6b4c30",
     fontSize: 14,
   },
   spinner: {
     width: 18,
     height: 18,
-    border: "2px solid #e5e7eb",
-    borderTopColor: "#2563eb",
+    border: "2px solid #c4b08a",
+    borderTopColor: "#d3a625",
     borderRadius: "50%",
     animation: "spin 0.6s linear infinite",
   },

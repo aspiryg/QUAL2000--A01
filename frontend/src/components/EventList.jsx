@@ -9,7 +9,7 @@ export default function EventList({ events, selected, onSelect, onDelete }) {
 
   return (
     <div>
-      <h3 style={styles.heading}>Events</h3>
+      <h3 style={styles.heading}>Notice Board</h3>
 
       <input
         style={styles.search}
@@ -20,23 +20,22 @@ export default function EventList({ events, selected, onSelect, onDelete }) {
       />
 
       {filtered.length === 0 ? (
-        <p style={{ color: "#999", fontStyle: "italic", fontSize: 14 }}>
+        <p style={{ color: "#8b7355", fontStyle: "italic", fontSize: 14 }}>
           {events.length === 0
-            ? "No events created yet."
+            ? "No events scheduled yet."
             : "No matching events."}
         </p>
       ) : (
         <ul style={styles.list}>
           {filtered.map((ev) => {
             const isSelected = selected === ev._id;
-            // console.log("Rendering event:", ev, "Selected:", isSelected);
             return (
               <li
                 key={ev._id}
                 style={{
                   ...styles.item,
-                  background: isSelected ? "#e8f0fe" : "#fff",
-                  borderColor: isSelected ? "#2563eb" : "#e0e0e0",
+                  background: isSelected ? "#e8dcc8" : "#faf6ed",
+                  borderColor: isSelected ? "#d3a625" : "#c4b08a",
                 }}
                 onClick={() => onSelect(ev._id)}
               >
@@ -49,7 +48,7 @@ export default function EventList({ events, selected, onSelect, onDelete }) {
                         e.stopPropagation();
                         onDelete(ev._id, ev.name);
                       }}
-                      title="Delete event"
+                      title="Vanish event"
                     >
                       ×
                     </button>
@@ -83,27 +82,31 @@ const styles = {
     marginBottom: 10,
     fontSize: 16,
     fontWeight: 600,
-    color: "#1a1a1a",
+    color: "#1a1a2e",
+    fontFamily: '"Cinzel", serif',
   },
   search: {
     width: "100%",
     padding: "8px 12px",
-    border: "1px solid #ccc",
+    border: "1px solid #c4b08a",
     borderRadius: 5,
     boxSizing: "border-box",
     fontSize: 14,
+    fontFamily: '"Lora", serif',
     marginBottom: 10,
+    background: "#fff",
     outline: "none",
   },
   list: { listStyle: "none", padding: 0, margin: 0 },
   item: {
-    border: "1px solid #e0e0e0",
+    border: "1px solid #c4b08a",
     borderRadius: 6,
     padding: "10px 14px",
     marginBottom: 6,
     cursor: "pointer",
     transition: "border-color 0.15s, box-shadow 0.15s",
     fontSize: 14,
+    fontFamily: '"Lora", serif',
   },
   row: {
     display: "flex",
@@ -116,24 +119,24 @@ const styles = {
     alignItems: "center",
     gap: 10,
   },
-  date: { color: "#666", fontSize: 12 },
+  date: { color: "#6b4c30", fontSize: 12 },
   badge: {
     marginLeft: "auto",
     fontSize: 12,
-    color: "#555",
+    color: "#5c4033",
     whiteSpace: "nowrap",
-    background: "#f3f4f6",
+    background: "#ede4d0",
     padding: "2px 8px",
     borderRadius: 10,
   },
   checkedBadge: {
-    color: "#16a34a",
+    color: "#2d6a4f",
     fontWeight: 600,
   },
   deleteBtn: {
     background: "none",
     border: "none",
-    color: "#999",
+    color: "#8b7355",
     fontSize: 18,
     cursor: "pointer",
     lineHeight: 1,

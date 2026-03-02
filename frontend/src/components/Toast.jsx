@@ -16,7 +16,7 @@ export default function Toast({ message, type = "success", onClose }) {
   }, [onClose]);
 
   const bgColor =
-    type === "error" ? "#dc2626" : type === "warning" ? "#f59e0b" : "#16a34a";
+    type === "error" ? "#740001" : type === "warning" ? "#d3a625" : "#2d6a4f";
 
   return (
     <div
@@ -70,7 +70,7 @@ const styles = {
     display: "flex",
     alignItems: "center",
     gap: 8,
-    boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+    boxShadow: "0 4px 12px rgba(26,26,46,0.25)",
     transition: "opacity 0.3s, transform 0.3s",
   },
   icon: {

@@ -103,17 +103,17 @@ export default function App() {
   const handleCreateEvent = async (data) => {
     await createEvent(data);
     await loadEvents();
-    addToast(`Event "${data.name}" created`);
+    addToast(`"${data.name}" has been scheduled`);
   };
 
   const handleDeleteEvent = async (eventId, eventName) => {
     const ok = await showConfirm(
-      `Delete "${eventName}" and all its attendees? This cannot be undone.`,
+      `Vanish "${eventName}" and all enrolled witches & wizards? This cannot be undone.`,
     );
     if (!ok) return;
     try {
       await deleteEvent(eventId);
-      addToast(`Event "${eventName}" deleted`);
+      addToast(`"${eventName}" has been vanished`);
       if (selectedEvent === eventId) {
         setSelectedEvent(null);
         setAttendees([]);
@@ -129,7 +129,7 @@ export default function App() {
     await registerAttendee(selectedEvent, data);
     await loadAttendees(selectedEvent);
     await loadEvents(); // refresh attendee counts
-    addToast(`${data.name} registered successfully`);
+    addToast(`${data.name} has been enrolled`);
   };
 
   const handleDeleteAttendee = async (attendeeId, attendeeName) => {
@@ -150,7 +150,7 @@ export default function App() {
       await checkInAttendee(selectedEvent, attendeeId);
       await loadAttendees(selectedEvent);
       await loadEvents(); // refresh checked-in counts
-      addToast("Attendee checked in");
+      addToast("Arrival recorded");
     } catch (err) {
       addToast(err.message, "error");
     }
@@ -175,9 +175,9 @@ export default function App() {
       a.download = "report.csv";
       a.click();
       window.URL.revokeObjectURL(url);
-      addToast("CSV downloaded");
+      addToast("Scroll downloaded");
     } catch (err) {
-      addToast("CSV download failed", "error");
+      addToast("Scroll download failed", "error");
     }
   };
 
@@ -199,11 +199,7 @@ export default function App() {
 
       <header style={styles.header}>
         <h1 style={styles.title}>Hogwarts School of Witchcraft and Wizardry</h1>
-        <p style={styles.subtitle}>
-          Create magical events, manage your attendees, and conjure up
-          insightful reports with ease. Whether you're organizing a Quidditch
-          match or a Potions class, our platform has you covered.
-        </p>
+        <p style={styles.subtitle}>Event Management &amp; Attendance Office</p>
       </header>
 
       <div style={styles.layout}>
@@ -232,7 +228,7 @@ export default function App() {
                 {selectedEventObj && (
                   <span style={styles.capacityBadge}>
                     {selectedEventObj.attendeeCount ?? 0}/
-                    {selectedEventObj.capacity} registered
+                    {selectedEventObj.capacity} enrolled
                   </span>
                 )}
               </div>
@@ -242,7 +238,7 @@ export default function App() {
                   style={tab === "attendees" ? styles.tabActive : styles.tab}
                   onClick={() => setTab("attendees")}
                 >
-                  Attendees
+                  Roster
                   {attendees.length > 0 && (
                     <span style={styles.tabBadge}>{attendees.length}</span>
                   )}
@@ -273,11 +269,11 @@ export default function App() {
             </>
           ) : (
             <div style={styles.emptyState}>
-              <p style={{ fontSize: 18, color: "#555", marginBottom: 4 }}>
+              <p style={{ fontSize: 18, color: "#5c4033", marginBottom: 4 }}>
                 No event selected
               </p>
-              <p style={{ color: "#999", fontSize: 14 }}>
-                Pick an event from the sidebar or create a new one.
+              <p style={{ color: "#8b7355", fontSize: 14 }}>
+                Select an event from the notice board or schedule a new one.
               </p>
             </div>
           )}
@@ -292,17 +288,29 @@ const styles = {
     maxWidth: 1060,
     margin: "0 auto",
     padding: "24px 20px",
-    fontFamily:
-      '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-    color: "#1a1a1a",
+    fontFamily: '"Lora", "Georgia", serif',
+    color: "#2b1d0e",
   },
   header: {
     marginBottom: 24,
-    borderBottom: "1px solid #e5e7eb",
+    borderBottom: "2px solid #d3a625",
     paddingBottom: 14,
+    textAlign: "center",
   },
-  title: { margin: "0 0 4px", fontSize: 26, fontWeight: 700 },
-  subtitle: { margin: 0, fontSize: 14, color: "#666" },
+  title: {
+    margin: "0 0 4px",
+    fontSize: 28,
+    fontWeight: 700,
+    fontFamily: '"Cinzel", "Georgia", serif',
+    color: "#1a1a2e",
+    letterSpacing: "0.5px",
+  },
+  subtitle: {
+    margin: 0,
+    fontSize: 14,
+    color: "#740001",
+    fontStyle: "italic",
+  },
   layout: { display: "flex", gap: 28 },
   sidebar: { width: 340, flexShrink: 0 },
   main: { flex: 1, minWidth: 0 },
@@ -313,43 +321,46 @@ const styles = {
     marginBottom: 12,
     flexWrap: "wrap",
   },
-  eventDate: { fontSize: 13, color: "#777" },
+  eventDate: { fontSize: 13, color: "#6b4c30" },
   capacityBadge: {
     marginLeft: "auto",
     fontSize: 12,
-    color: "#555",
-    background: "#f3f4f6",
+    color: "#5c4033",
+    background: "#ede4d0",
     padding: "3px 10px",
     borderRadius: 10,
   },
   tabs: { display: "flex", gap: 4, marginBottom: 18 },
   tab: {
     padding: "7px 18px",
-    background: "#e5e7eb",
+    background: "#e8dcc8",
     border: "none",
     borderRadius: 5,
     cursor: "pointer",
     fontSize: 14,
+    fontFamily: '"Lora", serif',
     transition: "background 0.15s",
     display: "flex",
     alignItems: "center",
     gap: 6,
+    color: "#2b1d0e",
   },
   tabActive: {
     padding: "7px 18px",
-    background: "#2563eb",
-    color: "#fff",
+    background: "#1a1a2e",
+    color: "#d3a625",
     border: "none",
     borderRadius: 5,
     cursor: "pointer",
     fontSize: 14,
+    fontFamily: '"Lora", serif',
     display: "flex",
     alignItems: "center",
     gap: 6,
   },
   tabBadge: {
     fontSize: 11,
-    background: "rgba(255,255,255,0.25)",
+    background: "rgba(211,166,37,0.35)",
     padding: "1px 7px",
     borderRadius: 8,
     fontWeight: 600,
@@ -357,7 +368,8 @@ const styles = {
   emptyState: {
     textAlign: "center",
     padding: "60px 20px",
-    border: "1px dashed #d1d5db",
+    border: "1px dashed #c4b08a",
     borderRadius: 8,
+    background: "#faf6ed",
   },
 };
