@@ -1,7 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-// I decided to use Jest for testing instead of the built-in node test module, just for learning purposes.
+/*
+  I was going to use Jest for testing, but it turned out jest doesn't work well with ESM modules.
+  and required a lot of configuration to make it work, so I decided to use the built-in test module 
+  in Node.js which is simpler and works out of the box with ESM.
+*/
 import {
   isValidEmailFormat,
   capacityExceeded,
@@ -15,7 +19,6 @@ import {
 } from "../../utils/helpers.js";
 
 // --- 1. Test isValidEmailFormat ---
-// ─── 1. Email validation ─────────────────────────────────────────────────
 
 test.describe("Test isValidEmailFormat function", () => {
   test("should return true for valid email formats", () => {
@@ -57,7 +60,7 @@ test.describe("Test isValidEmailFormat function", () => {
   });
 });
 
-// ─── 2. Capacity check ─────────────────────────────────────────────────
+// --- 2. Test capacityExceeded function ---
 
 test.describe("Test capacityExceeded function", () => {
   test("should return true when current capacity is equal to max capacity", () => {
@@ -88,7 +91,7 @@ test.describe("Test capacityExceeded function", () => {
   });
 });
 
-// ─── 3. Duplicate registration check ─────────────────────────────────────────────────
+// --- 3. Test isDuplicateRegistration function ---
 
 test.describe("Test isDuplicateRegistration function", () => {
   const eventId = "event123";
@@ -204,7 +207,7 @@ test.describe("Test isDuplicateRegistration function", () => {
   });
 });
 
-// --- 4. Check-in eligibility check ─────────────────────────────────────────────────
+// --- 4. Test canCheckIn function ---
 test.describe("Test canCheckIn function", () => {
   test("The function should return true if attendee is registered and has not checked in", () => {
     const attendee = {
@@ -256,7 +259,7 @@ test.describe("Test canCheckIn function", () => {
   });
 });
 
-// --- 5. Build report function ─────────────────────────────────────────────────
+// --- 5. Test buildReport function ---
 // (Tests for buildReport function would go here, but I'm skipping it for now since it's more complex and I want to focus on the simpler helper functions first)
 test.describe("Test buildReport function", () => {
   const event = {
