@@ -1,7 +1,8 @@
 # QUAL2000 - Assignment 01
 
-A simple web application for managing events and attendee, built with **Express**, **Mongoose**, and **React**.
-The purpose of this project is to demonstrate the use of different types of testing:
+A simple web application for managing **magical events and attendees** at _Hogwarts School of Witchcraft and Wizardry_, built with the modern “spells” of **Express**, **Mongoose**, and **React**.
+
+All magic aside — the true purpose of this project is to demonstrate the proper implementation of different types of testing:
 
 - Unit test
 - Integrated test
@@ -9,10 +10,10 @@ The purpose of this project is to demonstrate the use of different types of test
 
 ## Features
 
-- Create events
-- Register Atendees
-- Check in Atendees
-- Generate Atendnace reports (visual or downlodable csv)
+- Create magical events (Triwizard Tournament, Yule Ball, Duelling Club, etc.)
+- Register witches and wizards as attendees
+- Check in attendees at the Great Hall gates
+- Generate attendance reports (visual dashboard or downloadable CSV scroll)
 
 ---
 
@@ -72,9 +73,9 @@ The React app will open at `hhtp://localhost:3000` and proxy API requests to the
 
 | Method | Endpoint                                             | Description                                  |
 | ------ | ---------------------------------------------------- | -------------------------------------------- |
-| POST   | `/api/events`                                        | Create a new event                           |
+| POST   | `/api/events`                                        | Create a new magical event                   |
 | GET    | `/api/events`                                        | List all events                              |
-| GET    | `/api/events/:id`                                    | Get a single event                           |
+| GET    | `/api/events/:id`                                    | Retrieve a single event                      |
 | POST   | `/api/events/:eventId/attendees`                     | Register an attendee                         |
 | GET    | `/api/events/:eventId/attendees`                     | List attendees of a given event              |
 | PUT    | `/api/events/:eventId/attendees/:attendeeId/checkin` | Check in an attendee                         |
@@ -136,3 +137,9 @@ The repository includes a CI workflow at `.gethub/workflows/ci.yml` that:
 - **Frontend:** React (Vite)
 - **Testing:** Jest, Supertest, moongodb-memory-server
 - **CI:** GitHub Actions
+
+---
+
+> Even at Hogwarts, good magic requires discipline.
+
+---

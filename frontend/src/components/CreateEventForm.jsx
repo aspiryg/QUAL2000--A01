@@ -21,7 +21,7 @@ export default function CreateEventForm({ onCreated }) {
 
   return (
     <form onSubmit={handleSubmit} style={styles.form}>
-      <h3 style={styles.heading}>Create Event</h3>
+      <h3 style={styles.heading}>Create a Magical Event</h3>
 
       {error && <p style={styles.error}>{error}</p>}
 

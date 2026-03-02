@@ -198,9 +198,11 @@ export default function App() {
       )}
 
       <header style={styles.header}>
-        <h1 style={styles.title}>Event Check-In System</h1>
+        <h1 style={styles.title}>Hogwarts School of Witchcraft and Wizardry</h1>
         <p style={styles.subtitle}>
-          Manage events, register attendees, and track check-ins
+          Create magical events, manage your attendees, and conjure up
+          insightful reports with ease. Whether you're organizing a Quidditch
+          match or a Potions class, our platform has you covered.
         </p>
       </header>
 
