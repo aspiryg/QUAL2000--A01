@@ -12,10 +12,10 @@ import {
   isDuplicateRegistration,
   canCheckIn,
   buildReport,
-  formatEventDate,
-  getCheckInPercentage,
-  sortAttendeesByName,
-  summarizeAttendees,
+  // formatEventDate,
+  // getCheckInPercentage,
+  // sortAttendeesByName,
+  // summarizeAttendees,
 } from "../../utils/helpers.js";
 
 // --- 1. Test isValidEmailFormat ---

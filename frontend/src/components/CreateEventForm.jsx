@@ -22,7 +22,9 @@ export default function CreateEventForm({ onCreated }) {
   return (
     <form onSubmit={handleSubmit} style={styles.form}>
       <h3 style={styles.heading}>Schedule Event</h3>
-
+      <p style={styles.note}>
+        For feasts, classes, matches, and house activities.
+      </p>
       {error && <p style={styles.error}>{error}</p>}
 
       <label style={styles.label}>
@@ -80,6 +82,12 @@ const styles = {
     fontWeight: 600,
     color: "#1a1a2e",
     fontFamily: '"Cinzel", serif',
+  },
+  note: {
+    margin: "-8px 0 12px",
+    fontSize: 12,
+    color: "#6b4c30",
+    fontStyle: "italic",
   },
   label: {
     display: "block",

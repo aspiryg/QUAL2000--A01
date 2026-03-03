@@ -15,16 +15,16 @@ All magic aside — the true purpose of this project is to demonstrate the prope
 - **Record arrival** - mark attendees as arrived at the Great Hall gates
 - **Attendance scrolls** - generate attendance reports (visual dashboard or downloadable CSV scroll)
 - **Delete events & attendees** - with confirmation dialogs and attendees cascade removal
-- **Event stats** - live enrolled/arrived counts and spots remaining
-- **Search & filter** - find events quickly from the notice board
+- **Event stats**
+- **Search & filter**
 - **Toast notifications**
 
 ---
 
 ## Project Structure
 
-```
-TODO
+```bash
+## TODO
 ```
 
 ---
@@ -111,19 +111,38 @@ npm run test:integration
 - duplicate prevevtion
 - check-in rules
 - report building
+- and
 
 **Integration tests**
 
-```
-TODO:
-```
+- register an attendee, store them in the database and prevent duplicate registrations
+- register an attendee, check them in, and retrieve the correct report
+- handle full workflow with multiple attendees and generate correct csv report
+- prevent registration when event capacity is reached
+- prevent duplicate registrations for the same event
+- prevent check-in for unregistered attendees
+- prevent check-in for already checked-in attendees
+- delete an event and its registered attendees
+- delete an attendee from an event
+- returns correct stats
 
 ---
 
 ### 2. Frontend Tests
 
-```
-TODO
+I decided to apply the tests to the API service only, as testing React components
+turend out to be a task that required more research from me.
+
+```bash
+cd frontend
+
+# Run frontend tests once
+npm test
+
+# Run in watch mode
+npm run test:watch
+
+# Test React Components: TODO
 ```
 
 ---

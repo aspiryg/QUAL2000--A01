@@ -1,5 +1,16 @@
 import { useState } from "react";
+const houses = [
+  { name: "Gryffindor", color: "#740001", badgeBg: "#f5d7c8" },
+  { name: "Slytherin", color: "#1f5f3a", badgeBg: "#dcefe3" },
+  { name: "Ravenclaw", color: "#1a1a2e", badgeBg: "#dde3f3" },
+  { name: "Hufflepuff", color: "#6b4c30", badgeBg: "#f5ebcd" },
+];
 
+function getHouseForEvent(name) {
+  const normalized = String(name ?? "");
+  const hash = [...normalized].reduce((sum, ch) => sum + ch.charCodeAt(0), 0);
+  return houses[hash % houses.length];
+}
 export default function EventList({ events, selected, onSelect, onDelete }) {
   const [search, setSearch] = useState("");
 
@@ -10,11 +21,12 @@ export default function EventList({ events, selected, onSelect, onDelete }) {
   return (
     <div>
       <h3 style={styles.heading}>Notice Board</h3>
+      <p style={styles.subheading}>House gatherings, feasts, and fixtures</p>
 
       <input
         style={styles.search}
         type="text"
-        placeholder="Search events…"
+        placeholder="Search events or house gatherings…"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
@@ -29,6 +41,7 @@ export default function EventList({ events, selected, onSelect, onDelete }) {
         <ul style={styles.list}>
           {filtered.map((ev) => {
             const isSelected = selected === ev._id;
+            const house = getHouseForEvent(ev.name);
             return (
               <li
                 key={ev._id}
@@ -36,11 +49,23 @@ export default function EventList({ events, selected, onSelect, onDelete }) {
                   ...styles.item,
                   background: isSelected ? "#e8dcc8" : "#faf6ed",
                   borderColor: isSelected ? "#d3a625" : "#c4b08a",
+                  borderLeft: `4px solid ${house.color}`,
                 }}
                 onClick={() => onSelect(ev._id)}
               >
                 <div style={styles.row}>
-                  <strong style={{ fontSize: 14 }}>{ev.name}</strong>
+                  <div style={styles.titleWrap}>
+                    <strong style={{ fontSize: 14 }}>{ev.name}</strong>
+                    <span
+                      style={{
+                        ...styles.houseTag,
+                        color: house.color,
+                        background: house.badgeBg,
+                      }}
+                    >
+                      {house.name}
+                    </span>
+                  </div>
                   {onDelete && (
                     <button
                       style={styles.deleteBtn}
@@ -85,6 +110,12 @@ const styles = {
     color: "#1a1a2e",
     fontFamily: '"Cinzel", serif',
   },
+  subheading: {
+    margin: "-4px 0 10px",
+    fontSize: 12,
+    color: "#6b4c30",
+    fontStyle: "italic",
+  },
   search: {
     width: "100%",
     padding: "8px 12px",
@@ -113,6 +144,19 @@ const styles = {
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 4,
+  },
+  titleWrap: {
+    display: "flex",
+    alignItems: "center",
+    gap: 8,
+  },
+  houseTag: {
+    fontSize: 10,
+    fontWeight: 600,
+    borderRadius: 999,
+    padding: "1px 7px",
+    letterSpacing: "0.2px",
+    fontFamily: '"Cinzel", serif',
   },
   meta: {
     display: "flex",

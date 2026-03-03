@@ -1,8 +1,16 @@
 import { useState } from "react";
 
+const houseAccents = [
+  { name: "Gryffindor", color: "#740001", border: "#d3a625" },
+  { name: "Slytherin", color: "#1f5f3a", border: "#c4b08a" },
+  { name: "Ravenclaw", color: "#1a1a2e", border: "#d3a625" },
+  { name: "Hufflepuff", color: "#2b1d0e", border: "#d3a625" },
+];
+
 export default function RegisterForm({ onRegister }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [house, setHouse] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
@@ -11,9 +19,10 @@ export default function RegisterForm({ onRegister }) {
     setError("");
     setSuccess("");
     try {
-      await onRegister({ name, email });
+      await onRegister({ name, house, email });
       setSuccess(`${name} has been enrolled`);
       setName("");
+      setHouse("");
       setEmail("");
     } catch (err) {
       setError(err.message);
@@ -33,7 +42,9 @@ export default function RegisterForm({ onRegister }) {
       >
         Enrol Witch / Wizard
       </h4>
-
+      <p style={styles.note}>
+        Keep each house roster up to date before arrival.
+      </p>
       {error && <p style={styles.error}>{error}</p>}
       {success && <p style={styles.success}>{success}</p>}
 
@@ -46,6 +57,32 @@ export default function RegisterForm({ onRegister }) {
           placeholder="e.g. Harry Potter"
           required
         />
+      </label>
+      <label style={styles.label}>
+        House
+        <select
+          style={styles.select}
+          value={house}
+          onChange={(e) => setHouse(e.target.value)}
+          required
+        >
+          <option value="" disabled>
+            Select house…
+          </option>
+          <span style={houseAccents[0]}>
+            <option value="gryffindor">Gryffindor</option>
+          </span>
+
+          <span style={houseAccents[1]}>
+            <option value="hufflepuff">Hufflepuff</option>
+          </span>
+          <span style={houseAccents[2]}>
+            <option value="ravenclaw">Ravenclaw</option>
+          </span>
+          <span style={houseAccents[3]}>
+            <option value="slytherin">Slytherin</option>
+          </span>
+        </select>
       </label>
 
       <label style={styles.label}>
@@ -108,6 +145,32 @@ const styles = {
     fontWeight: 600,
     fontFamily: '"Cinzel", serif',
   },
+  note: {
+    margin: "-6px 0 10px",
+    fontSize: 12,
+    color: "#6b4c30",
+    fontStyle: "italic",
+    fontFamily: '"Lora", serif',
+  },
   error: { color: "#740001", fontSize: 13, margin: "0 0 6px" },
   success: { color: "#2d6a4f", fontSize: 13, margin: "0 0 6px" },
+
+  select: {
+    display: "block",
+    width: "100%",
+    padding: "8px 10px",
+    marginTop: 4,
+    border: "1px solid #c4b08a",
+    borderRadius: 5,
+    boxSizing: "border-box",
+    fontSize: 14,
+    fontFamily: '"Lora", serif',
+    background: "#fff",
+    outline: "none",
+  },
+  option: {
+    padding: "8px 10px",
+    fontSize: 14,
+    fontFamily: '"Lora", serif',
+  },
 };

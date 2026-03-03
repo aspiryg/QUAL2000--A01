@@ -19,19 +19,28 @@ import {
 
 let toastId = 0;
 
+// Accent colors for each Hogwarts house, used in the UI
+const houseAccents = [
+  { name: "Gryffindor", color: "#740001", border: "#d3a625" },
+  { name: "Slytherin", color: "#1f5f3a", border: "#c4b08a" },
+  { name: "Ravenclaw", color: "#1a1a2e", border: "#d3a625" },
+  { name: "Hufflepuff", color: "#2b1d0e", border: "#d3a625" },
+];
+
 export default function App() {
+  // --- State ---
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [attendees, setAttendees] = useState([]);
   const [report, setReport] = useState(null);
   const [tab, setTab] = useState("attendees");
+  // UI state
   const [loadingAttendees, setLoadingAttendees] = useState(false);
   const [toasts, setToasts] = useState([]);
   const [confirm, setConfirm] = useState(null); // { message, onConfirm }
   const confirmResolveRef = useRef(null);
 
-  // ─── Toast helpers ──────────────────────────────────────────────────
-
+  // --- Toast helpers ---
   const addToast = useCallback((message, type = "success") => {
     const id = ++toastId;
     setToasts((prev) => [...prev, { id, message, type }]);
@@ -41,8 +50,7 @@ export default function App() {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   }, []);
 
-  // ─── Confirm dialog ─────────────────────────────────────────────────
-
+  // --- Confirm dialog ---
   const showConfirm = useCallback((message) => {
     return new Promise((resolve) => {
       confirmResolveRef.current = resolve;
@@ -60,7 +68,7 @@ export default function App() {
     setConfirm(null);
   };
 
-  // ─── Data loading ───────────────────────────────────────────────────
+  // --- Data Loading ---
 
   const loadEvents = useCallback(async () => {
     try {
@@ -98,7 +106,7 @@ export default function App() {
     }
   }, [selectedEvent, loadAttendees]);
 
-  // ─── Handlers ───────────────────────────────────────────────────────
+  // --- Handlers ---
 
   const handleCreateEvent = async (data) => {
     await createEvent(data);
@@ -201,6 +209,20 @@ export default function App() {
         <h1 style={styles.title}>Hogwarts School of Witchcraft and Wizardry</h1>
         <p style={styles.subtitle}>Event Management &amp; Attendance Office</p>
       </header>
+      <div style={styles.houseRow}>
+        {houseAccents.map((house) => (
+          <span
+            key={house.name}
+            style={{
+              ...styles.houseBadge,
+              background: house.color,
+              borderColor: house.border,
+            }}
+          >
+            {house.name}
+          </span>
+        ))}
+      </div>
 
       <div style={styles.layout}>
         {/* Left sidebar */}
@@ -273,7 +295,8 @@ export default function App() {
                 No event selected
               </p>
               <p style={{ color: "#8b7355", fontSize: 14 }}>
-                Select an event from the notice board or schedule a new one.
+                Select an event from the notice board or schedule a new
+                inter-house gathering..
               </p>
             </div>
           )}
@@ -296,6 +319,9 @@ const styles = {
     borderBottom: "2px solid #d3a625",
     paddingBottom: 14,
     textAlign: "center",
+    background: "#faf6ed",
+    borderRadius: 10,
+    paddingTop: 12,
   },
   title: {
     margin: "0 0 4px",
@@ -310,6 +336,22 @@ const styles = {
     fontSize: 14,
     color: "#740001",
     fontStyle: "italic",
+  },
+  houseRow: {
+    marginTop: 10,
+    display: "flex",
+    gap: 8,
+    justifyContent: "center",
+    flexWrap: "wrap",
+  },
+  houseBadge: {
+    fontSize: 11,
+    color: "#fff",
+    border: "1px solid",
+    padding: "2px 10px",
+    borderRadius: 999,
+    fontFamily: '"Cinzel", serif',
+    letterSpacing: "0.3px",
   },
   layout: { display: "flex", gap: 28 },
   sidebar: { width: 340, flexShrink: 0 },
