@@ -130,7 +130,7 @@ npm run test:integration
 
 ### 2. Frontend Tests
 
-I decided to apply the tests to the API service only, as testing React components
+I decided to create tests to the API service only, as testing React components
 turend out to be a task that required more research from me.
 
 ```bash
@@ -149,7 +149,7 @@ npm run test:watch
 
 ## GitHub Actions (CI)
 
-The repository includes a CI workflow at `.gethub/workflows/ci.yml` that:
+The repository includes a CI workflow at `.gethub/workflows/ci-testing.yml` that:
 
 - Triggers on every **push** and **pull request**
 - Installs dependencies
