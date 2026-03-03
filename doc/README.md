@@ -140,13 +140,3 @@ Workflow location:
 ```
 .github/workflows/ci-testing.yml
 ```
-
----
-
-# Quick Checklist
-
-1. Install dependencies (`npm install`)
-2. Create `.env` file in backend
-3. Start backend (`npm run dev`)
-4. Start frontend (`npm run dev`)
-5. Run tests (`npm test`)
